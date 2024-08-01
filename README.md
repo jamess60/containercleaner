@@ -12,19 +12,27 @@ It currently only supports docker compose setups, but I may restore support for 
 
 ______________________
 
-How to use
+How to Install
 ---------------------
-Tool does not accept any args, runs automatically via cron. Please ensure conf/config.ini is present and correct.
 
-Required pip packages: colorama, configparser, git, docker 
+1) Ensure you have the required pip packages
+Debian: `sudo apt install python3-colorama python3-git python3-docker`
+pip: `pip install colorama git docker`
 
-1) Git clone this repo to /usr/share
-2) edit /conf/config.ini to set your compose file path, git enable/disable etc
-3) edit /conf/ContainerCleaner.cron to make it run at your chosen time(s). Runs at 2am daily by default
-4) cp conf/ContainerCleaner.cron /etc/cron.d/
-5) systemctl daemon-reload
-6) To test manually - python3 src/ContainerCleaner.py
+2) Clone the git repo 
+`cd /usr/share/ && git clone https://github.com/jamess60/containercleaner.git`
 
+3) Edit conf/config.ini and add the file path for your docker compose file
+`nano config/config.ini`
+
+4) Optional - If you do not wish for the script to run daily at 2am (default), Edit conf/ContainerCleaner.cron and change the cron value
+`nano config/ContainerCleaner.cron`
+
+5) Manually test the script works as expected 
+`python3 /usr/share/ContainerCleaner/src/ContainerCleaner.py`
+
+6) Enable cron
+`sudo cp config/ContainerCleaner.cron /etc/cron.d/ && sudo systemctl daemon reload`
 ______________________
 
 
@@ -37,6 +45,31 @@ Changelog
 	- Removed from manual podman support in favour of docker compose
 	- Added configParser to enable git pulling
 	- Branched from single file to main+library
+
+______________________
+
+
+FAQ
+---------------------
+1. The script says "This script may KILL and DELETE containers without confirmation" - NOPE!
+	- The only way to move a container to a new image is to stop the container and start it again. The only time a container will be killed is if the docker compose command would "recreate". Watchtower would do the same.
+2. Why isn't this just a one liner bash script?
+	- While that would be possible in v1, it would limit future feature set expansion
+
+______________________
+
+
+Feature wishlist
+---------------------
+- Implement support for standalone docker
+- Implement support for podman 
+- Add an argument to generate a template config file 
+- Add a dry run/simulation mode (doesn't make any changes)
+- Implement proper logging support 
+- Implement Email notifications
+- Implement Ntfy notifications
+- Implement support for running with multiple git repos and compose files 
+- Explore options to package this as a deb, rpm, pip install etc 
 ______________________
 
 ![screenshot](https://jamesmaple.co.uk/downloads/gitimg/containercleaner/readme-screenshot.png)
