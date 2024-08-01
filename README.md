@@ -38,3 +38,5 @@ Changelog
 	- Added configParser to enable git pulling
 	- Branched from single file to main+library
 ______________________
+
+![screenshot]([http://url/to/img.png](https://jamesmaple.co.uk/downloads/gitimg/containercleaner/readme-screenshot.png))
