@@ -55,6 +55,11 @@ FAQ
 	- The only way to move a container to a new image is to stop the container and start it again. The only time a container will be killed is if the docker compose command would "recreate". Watchtower would do the same.
 2. Why isn't this just a one liner bash script?
 	- While that would be possible in v1, it would limit future feature set expansion
+3. Isn't this basically watchtower with extra steps?
+	- Kinda sorta but not really. Watchtower pulls new images, but is slow to recreate the container (sometimes multiple days in my case). It also doesn't always reliably remove unused images. Container cleaner doesn't directly touch docker.sock which can also be advantageous for security reasons. I wrote this to be a faster/more reliable lightweight alternative with the potential to expand features later.
+
+
+
 
 ______________________
 
