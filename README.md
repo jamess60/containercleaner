@@ -29,7 +29,7 @@ pip: `pip install colorama python-git python-docker`
 `python3 /usr/share/ContainerCleaner/src/ContainerCleaner.py`
 
 5) Enable SystemD
-`cp conf/systemd/* /etc/systemd/system/ && systemctl daemon-reload`
+`cp conf/systemd/* /etc/systemd/system/ && systemctl daemon-reload && systemctl enable containercleaner.timer`
 If you wish to run cron instead of systemd, there is an example in conf/ContainerCleaner.cron. You can change the time/frequency in conf/systemd/containercleaner.timer before copying it to /etc...
 ______________________
 
