@@ -12,12 +12,12 @@ It currently only supports docker compose setups, but I may restore support for 
 
 ______________________
 
-How to Install
+How to Install (WIP)
 ---------------------
 
 1) Ensure you have the required pip packages
 Debian: `sudo apt install python3-colorama python3-git python3-docker`
-pip: `pip install colorama git docker`
+pip: `pip install colorama python-git python-docker`
 
 2) Clone the git repo 
 `cd /usr/share/ && git clone https://github.com/jamess60/containercleaner.git`
@@ -25,28 +25,15 @@ pip: `pip install colorama git docker`
 3) Edit conf/config.ini and add the file path for your docker compose file
 `nano config/config.ini`
 
-4) Optional - If you do not wish for the script to run daily at 2am (default), Edit conf/ContainerCleaner.cron and change the cron value
-`nano config/ContainerCleaner.cron`
-
-5) Manually test the script works as expected 
+4) Manually test the script works as expected 
 `python3 /usr/share/ContainerCleaner/src/ContainerCleaner.py`
 
-6) Enable cron
-`sudo cp config/ContainerCleaner.cron /etc/cron.d/ && sudo systemctl daemon reload`
+5) Enable SystemD
+`cp conf/systemd/* /etc/systemd/system/ && systemctl daemon-reload`
+If you wish to run cron instead of systemd, there is an example in conf/ContainerCleaner.cron. You can change the time/frequency in conf/systemd/containercleaner.timer before copying it to /etc...
 ______________________
 
 
-Changelog
----------------------
-## V1.0
-	- Refactor of CERN version
-		- Removed CERN Mail
-		- Removed SelfCheck
-	- Removed from manual podman support in favour of docker compose
-	- Added configParser to enable git pulling
-	- Branched from single file to main+library
-
-______________________
 
 
 FAQ
@@ -75,6 +62,7 @@ Feature wishlist
 - Implement Ntfy notifications
 - Implement support for running with multiple git repos and compose files 
 - Explore options to package this as a deb, rpm, pip install etc 
+- Write better install instructions 
 ______________________
 
 ![screenshot](https://jamesmaple.co.uk/downloads/gitimg/containercleaner/readme-screenshot.png)

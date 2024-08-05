@@ -1,0 +1,13 @@
+[Unit]
+Description=Runs ContainerCleaner every day at 2am
+
+[Timer]
+Unit=containercleaner.service
+OnCalendar=*-*-* 02:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+
+
+# Put me in /etc/systemd/system/ and run systemctl daemon-reload

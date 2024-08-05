@@ -11,7 +11,6 @@ def git_pull(GIT_REPO_PATH):
         git_pulled = True
     except:
         git_pulled = False
-        print("debug3")
 
     if git_pulled == True:
         script.ok_msg("Git Pull OK!")

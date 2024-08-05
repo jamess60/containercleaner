@@ -1,0 +1,11 @@
+[Unit]
+Description=ContainerCleaner
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/share/ContainerCleaner/src/ContainerCleaner.py
+User=root
+
+
+
+# Put me in /etc/systemd/system/ and run systemctl daemon-reload
