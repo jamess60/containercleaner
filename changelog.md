@@ -4,7 +4,7 @@ Changelog
 ## V1.0.1
 	- Update readme 
 	- Remove some debug print statements that slipped through
-	
+	- Added systemd timer and service, updated README to reflect that this is prefered over cron	
 
 
 ## V1.0
