@@ -18,3 +18,5 @@ def git_pull(GIT_REPO_PATH):
     if git_pulled == False:
         script.err_msg("Git Pull Failed!")
 
+    return git_pulled
+

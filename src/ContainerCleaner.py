@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 __author__ = "james_s60"
-__date__ = "05 August 2024"
+__date__ = "04 November 2024"
 __credits__ = ["james_s60"]
-__version__ = "1.0.1"
+__version__ = "1.1"
 
 
 ############################
@@ -16,6 +16,7 @@ import os
 ##
 from functions import git
 from functions import script
+from functions import ntfy
 from functions import docker_compose
 from functions import docker
 # from functions import docker
@@ -29,12 +30,17 @@ from functions import docker
 config = ConfigParser()
 config.read('/usr/share/ContainerCleaner/conf/config.ini')
 # Main
-CONTAINER_ENGINE = config['MAIN']['CONTAINER_ENGINE']
+CONTAINER_ENGINE = str(config['MAIN']['CONTAINER_ENGINE'])
 # Docker Compose
-COMPOSE_FILE = config['DOCKER_COMPOSE']['COMPOSE_FILE']
+COMPOSE_FILE = str(config['DOCKER_COMPOSE']['COMPOSE_FILE'])
 # Git
-GIT_ENABLED = str(config['GIT']['GIT_ENABLED'])
+GIT_ENABLED = config['GIT'].getboolean('GIT_ENABLED')
 GIT_REPO_PATH = str(config['GIT']['GIT_REPO_PATH'])
+# Ntfy
+NTFY_ENABLED = config['NTFY'].getboolean('NTFY_ENABLED')
+# NTFY_HOST = str(config['NTFY']['NTFY_HOST'])     - This is now parsed directly in src/functions/ntfy.py!
+# NTFY_TOPIC = str(config['NTFY']['NTFY_TOPIC'])   - This is now parsed directly in src/functions/ntfy.py!
+
 
 # Note to future self, if accepting a list of container images, must use ast method
 # Exmaple: IMAGES = ast.literal_eval(config.get("PODMAN", "IMAGES"))
@@ -62,7 +68,7 @@ script.rainbow("\n \
 |  $$$$$$/| $$|  $$$$$$$|  $$$$$$$| $$  | $$|  $$$$$$$| $$                          \n \
  \______/ |__/ \_______/ \_______/|__/  |__/ \_______/|__/                          \n \
                                                                                     \n \
-                     Container Cleaner V 1.0                                        \n\n")                                                                             
+                     Container Cleaner V 1.1                                        \n\n")                                                                             
 print(Style.RESET_ALL)
 print("\n\n")
 
@@ -71,10 +77,16 @@ script.warn_msg("THIS SCRIPT MAY KILL AND DELETE CONTAINERS/IMAGES WITHOUT CONFI
 print("\n\n")
 
 
+# No need to implement further if config file exists checks here as it will fail on line 31
+# Could be worth implementing additional sanity checks for other variables as the config complexity grows
+
 if CONTAINER_ENGINE == "docker_compose":
     # Run git pull
-    if GIT_ENABLED == "true":
-        git.git_pull(GIT_REPO_PATH)
+    if GIT_ENABLED == True:
+        git_pulled = git.git_pull(GIT_REPO_PATH)
+
+    if NTFY_ENABLED == True and git_pulled == False:
+        ntfy.ntfy_warn_git_pull_fail()
         
 
     # Run docker compose pull
@@ -92,6 +104,7 @@ if CONTAINER_ENGINE == "docker_compose":
 
 elif CONTAINER_ENGINE == "docker":
     script.err_msg("Standalone docker support has not yet been implemented. Please view Readme.")
+    ntfy.ntfy_err_invalid_container_engine()
 
     # Run git pull
     # Docker pull each image in list
@@ -105,6 +118,7 @@ elif CONTAINER_ENGINE == "docker":
 
 elif CONTAINER_ENGINE == "podman":
     script.err_msg("Standalone podman support has not yet been implemented. Please view Readme.")
+    ntfy.ntfy_err_invalid_container_engine()
 
     # Run git pull
     # Docker pull each image in list
@@ -118,9 +132,12 @@ elif CONTAINER_ENGINE == "podman":
 
 else:
     script.err_msg("Invalid Configuration. Please review config.ini and README.")
+    ntfy.ntfy_err_invalid_config()
+
 
 
 print("\n\n\n")
 script.ok_msg("Finished! Exiting...")
+ntfy.ntfy_ok_run_complete()
 
 exit()

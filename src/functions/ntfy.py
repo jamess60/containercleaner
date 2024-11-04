@@ -1,0 +1,94 @@
+import requests
+import socket
+from configparser import ConfigParser 
+
+
+############################
+# Parse NTFY Config
+############################
+config = ConfigParser()
+config.read('/usr/share/ContainerCleaner/conf/config.ini')
+
+NTFY_HOST = str(config['NTFY']['NTFY_HOST'])
+NTFY_TOPIC = str(config['NTFY']['NTFY_TOPIC'])
+############################
+
+
+hostname = str(socket.gethostname())
+
+
+
+def ntfy_err_invalid_config():
+	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+	    data="Run failed - Invalid config file",
+	    headers={
+	        "Title": "ContainerCleaner on " + hostname,
+	        "Priority": "urgent",
+	        "Tags": "x,pensive"
+	    })
+
+
+
+def ntfy_err_invalid_container_engine():
+	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+    data="Run failed - Invalid container engine. Sanity check config file.",
+    headers={
+        "Title": "ContainerCleaner on " + hostname,
+        "Priority": "urgent",
+        "Tags": "x,pensive"
+    })
+
+
+
+def ntfy_warn_git_pull_fail():
+	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+    data="Warning - Unable to pull latest compose file from git. Proceeding with local copy.",
+    headers={
+        "Title": "ContainerCleaner on " + hostname,
+        "Priority": "high",
+        "Tags": "exclamation,raised_eyebrow"
+    })
+
+
+
+def ntfy_ok_run_complete():
+	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+    data="Run complete",
+    headers={
+        "Title": "ContainerCleaner on " + hostname,
+        "Priority": "default",
+        "Tags": "white_check_mark,slightly_smiling_face"
+    })	
+
+
+
+
+# ✅🙂 - "Tags": "white_check_mark,slightly_smiling_face"
+# ❗🤨 - "Tags": "exclamation,raised_eyebrow"
+# ❌😔 - "Tags": "x,pensive"
+# https://docs.ntfy.sh/emojis/
+
+# Priorities: urgent (5), high (4), default (none) (3), low (2), min (1)
+# https://docs.ntfy.sh/publish/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

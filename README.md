@@ -4,7 +4,7 @@ ContainerCleaner
 
 About
 -----------------
-ContainerCleaner is a port of my CERN Project, PodmanCleaner. It runs automatically, via cron, and will pull the git repo, pull the latest container images, recreate the compose file containers and remove any old images. 
+ContainerCleaner is a port of my CERN Project, PodmanCleaner. It runs automatically, via cron/sysd, and will pull the git repo, pull the latest container images, recreate the compose file containers and remove any old images. 
 
 This keeps storage use to a minimum on the host, ensures all services are up to date and prevents any hung processes/containers remaining active.    
 
@@ -16,8 +16,8 @@ How to Install (WIP)
 ---------------------
 
 1) Ensure you have the required pip packages
-Debian: `sudo apt install python3-colorama python3-git python3-docker`
-pip: `pip install colorama python-git python-docker`
+Debian: `sudo apt install python3-colorama python3-git python3-docker python3-requests curl`
+pip: `pip install colorama python-git python-docker python3-requests curl`
 
 2) Clone the git repo 
 `cd /usr/share/ && git clone https://github.com/jamess60/containercleaner.git`
@@ -55,14 +55,12 @@ Feature wishlist
 ---------------------
 - Implement support for standalone docker
 - Implement support for podman 
-- Add an argument to generate a template config file 
 - Add a dry run/simulation mode (doesn't make any changes)
 - Implement proper logging support 
-- Implement Email notifications
-- Implement Ntfy notifications
 - Implement support for running with multiple git repos and compose files 
 - Explore options to package this as a deb, rpm, pip install etc 
 - Write better install instructions 
+- Implement better sanity checking to make sure each step passes / config is valid
 ______________________
 
 ![screenshot](https://jamesmaple.co.uk/downloads/gitimg/containercleaner/readme-screenshot.png)

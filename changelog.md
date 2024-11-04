@@ -1,6 +1,12 @@
 Changelog
 ---------------------
 
+## V1.1
+	- Updated readme 
+	- Implemented support for Ntfy notifications
+	- Removed email notifications from the feature wish list for the moment (Ntfy can handle this), may re-add if there is demand	
+
+
 ## V1.0.1
 	- Update readme 
 	- Remove some debug print statements that slipped through
@@ -16,3 +22,5 @@ Changelog
 	- Branched from single file to main+library
 
 ______________________
+
+
