@@ -19,21 +19,21 @@ hostname = str(socket.gethostname())
 
 
 def ntfy_err_invalid_config():
-	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
-	    data="Run failed - Invalid config file",
-	    headers={
-	        "Title": "ContainerCleaner on " + hostname,
-	        "Priority": "urgent",
-	        "Tags": "x,pensive"
-	    })
+    requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+        data="Run failed on " + hostname + " - Invalid config file",
+        headers={
+            "Title": "ContainerCleaner",
+            "Priority": "urgent",
+            "Tags": "x,pensive"
+        })
 
 
 
 def ntfy_err_invalid_container_engine():
-	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
-    data="Run failed - Invalid container engine. Sanity check config file.",
+    requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+    data="Run failed on " + hostname + " - Invalid container engine. Sanity check config file.",
     headers={
-        "Title": "ContainerCleaner on " + hostname,
+        "Title": "ContainerCleaner",
         "Priority": "urgent",
         "Tags": "x,pensive"
     })
@@ -41,10 +41,10 @@ def ntfy_err_invalid_container_engine():
 
 
 def ntfy_warn_git_pull_fail():
-	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
-    data="Warning - Unable to pull latest compose file from git. Proceeding with local copy.",
+    requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+    data="Warning on " + hostname + " - Unable to pull latest compose file from git. Proceeding with local copy.",
     headers={
-        "Title": "ContainerCleaner on " + hostname,
+        "Title": "ContainerCleaner",
         "Priority": "high",
         "Tags": "exclamation,raised_eyebrow"
     })
@@ -52,13 +52,13 @@ def ntfy_warn_git_pull_fail():
 
 
 def ntfy_ok_run_complete():
-	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
-    data="Run complete",
+    requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+    data="Run complete on " + hostname,
     headers={
-        "Title": "ContainerCleaner on " + hostname,
+        "Title": "ContainerCleaner",
         "Priority": "default",
         "Tags": "white_check_mark,slightly_smiling_face"
-    })	
+    })  
 
 
 

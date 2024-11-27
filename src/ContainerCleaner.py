@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 __author__ = "james_s60"
-__date__ = "04 November 2024"
+__date__ = "27 November 2024"
 __credits__ = ["james_s60"]
-__version__ = "1.1"
+__version__ = "1.1.1"
 
 
 ############################

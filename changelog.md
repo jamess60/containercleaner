@@ -1,5 +1,8 @@
 Changelog
 ---------------------
+## V1.1.1
+	- Tweaked formatting of Ntfy notifications to make them more iOS friendly
+
 
 ## V1.1
 	- Updated readme 
