@@ -3,7 +3,7 @@ Description=ContainerCleaner
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /usr/share/ContainerCleaner/src/ContainerCleaner.py
+ExecStart=/usr/bin/python3 /usr/share/containercleaner/src/ContainerCleaner.py
 User=root
 
 
