@@ -1,22 +1,23 @@
-import git  # pip install gitpython or apt install python3-git
+import git
 from functions import script
 
 
 
-def git_pull(GIT_REPO_PATH):
-    script.info_msg("Attempting to run Git Pull...")
-    try:
-        repo = git.Repo(GIT_REPO_PATH)
-        repo.remotes.origin.pull()
-        git_pulled = True
-    except:
-        git_pulled = False
+def git_pull(GIT_REPO_PATHS):
+    script.info_msg("Attempting to run Git Pull(s)...")
 
-    if git_pulled == True:
-        script.ok_msg("Git Pull OK!")
+    all_success = True
 
-    if git_pulled == False:
-        script.err_msg("Git Pull Failed!")
 
-    return git_pulled
+    for GIT_REPO_PATH in GIT_REPO_PATHS:
+        try:
+            repo = git.Repo(GIT_REPO_PATH)
+            repo.remotes.origin.pull()
+            script.ok_msg("Git Pull OK! (" + str(GIT_REPO_PATH) + ")")
+        except:
+            all_success = False
+            script.err_msg("Git Pull Failed! (" + str(GIT_REPO_PATH) + ")")
+
+
+    return all_success
 

@@ -7,7 +7,7 @@ from configparser import ConfigParser
 # Parse NTFY Config
 ############################
 config = ConfigParser()
-config.read('/usr/share/ContainerCleaner/conf/config.ini')
+config.read('/usr/share/containercleaner/conf/config.ini')
 
 NTFY_HOST = str(config['NTFY']['NTFY_HOST'])
 NTFY_TOPIC = str(config['NTFY']['NTFY_TOPIC'])
@@ -19,18 +19,18 @@ hostname = str(socket.gethostname())
 
 
 def ntfy_err_invalid_config():
-    requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
-        data="Run failed on " + hostname + " - Invalid config file",
-        headers={
-            "Title": "ContainerCleaner",
-            "Priority": "urgent",
-            "Tags": "x,pensive"
-        })
+	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+	    data="Run failed on " + hostname + " - Invalid config file",
+	    headers={
+	        "Title": "ContainerCleaner",
+	        "Priority": "urgent",
+	        "Tags": "x,pensive"
+	    })
 
 
 
 def ntfy_err_invalid_container_engine():
-    requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
     data="Run failed on " + hostname + " - Invalid container engine. Sanity check config file.",
     headers={
         "Title": "ContainerCleaner",
@@ -41,8 +41,8 @@ def ntfy_err_invalid_container_engine():
 
 
 def ntfy_warn_git_pull_fail():
-    requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
-    data="Warning on " + hostname + " - Unable to pull latest compose file from git. Proceeding with local copy.",
+	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+    data="Warning on " + hostname + " - Some/All git pulls failed. Proceeding with local copy. Please manually issue a git pull (and resolve issues) on each repo.",
     headers={
         "Title": "ContainerCleaner",
         "Priority": "high",
@@ -52,13 +52,13 @@ def ntfy_warn_git_pull_fail():
 
 
 def ntfy_ok_run_complete():
-    requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
+	requests.post(NTFY_HOST + "/" + NTFY_TOPIC,
     data="Run complete on " + hostname,
     headers={
         "Title": "ContainerCleaner",
         "Priority": "default",
         "Tags": "white_check_mark,slightly_smiling_face"
-    })  
+    })	
 
 
 

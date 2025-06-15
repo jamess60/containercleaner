@@ -7,7 +7,7 @@ from functions import script
 
 def docker_compose_pull(COMPOSE_FILE):
     print("\n")
-    script.info_msg("Attempting to pull new docker images...")
+    script.info_msg("Attempting to pull new docker images for " + str(COMPOSE_FILE) + " ...")
     print("\n")
 
     try:
@@ -28,7 +28,7 @@ def docker_compose_pull(COMPOSE_FILE):
 
 def docker_compose_recreate(COMPOSE_FILE):
     print("\n")
-    script.info_msg("Attempting to bring up compose file...")
+    script.info_msg("Attempting to bring up compose file " + str(COMPOSE_FILE) + " ...")
     print("\n")
 
     try:
@@ -43,3 +43,4 @@ def docker_compose_recreate(COMPOSE_FILE):
         script.ok_msg("Docker Compose recreate OK! - Containers should be up.")
     elif docker_compose_pulled == False:
         script.err_msg("Docker Compose recreate Failed! - Containers may not be up!")
+

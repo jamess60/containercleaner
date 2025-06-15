@@ -1,4 +1,4 @@
-import docker # apt install python3-docker
+import docker
 from functions import script
 
 

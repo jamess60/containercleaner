@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 __author__ = "james_s60"
-__date__ = "27 November 2024"
+__date__ = "15 June 2025"
 __credits__ = ["james_s60"]
-__version__ = "1.1.1"
+__version__ = "1.2"
 
 
 ############################
@@ -17,10 +17,9 @@ import os
 from functions import git
 from functions import script
 from functions import ntfy
-from functions import docker_compose
 from functions import docker
-# from functions import docker
-# from functions import podman
+from functions import docker_compose
+from functions import docker_swarm
 ############################
 
 
@@ -28,22 +27,21 @@ from functions import docker
 # Parse Config
 ############################
 config = ConfigParser()
-config.read('/usr/share/ContainerCleaner/conf/config.ini')
+config.read('/usr/share/containercleaner/conf/config.ini')
 # Main
 CONTAINER_ENGINE = str(config['MAIN']['CONTAINER_ENGINE'])
 # Docker Compose
-COMPOSE_FILE = str(config['DOCKER_COMPOSE']['COMPOSE_FILE'])
+COMPOSE_FILES = [line.strip() for line in config.get('DOCKER_COMPOSE', 'COMPOSE_FILES').splitlines() if line.strip()]
+# Docker Swarm
+SWARM_FILES = [line.strip() for line in config.get('DOCKER_SWARM', 'SWARM_FILES').splitlines() if line.strip()]
 # Git
 GIT_ENABLED = config['GIT'].getboolean('GIT_ENABLED')
-GIT_REPO_PATH = str(config['GIT']['GIT_REPO_PATH'])
+GIT_REPO_PATHS = [line.strip() for line in config.get('GIT', 'GIT_REPO_PATHS').splitlines() if line.strip()]
 # Ntfy
 NTFY_ENABLED = config['NTFY'].getboolean('NTFY_ENABLED')
-# NTFY_HOST = str(config['NTFY']['NTFY_HOST'])     - This is now parsed directly in src/functions/ntfy.py!
-# NTFY_TOPIC = str(config['NTFY']['NTFY_TOPIC'])   - This is now parsed directly in src/functions/ntfy.py!
+    # For config options such as Ntfy host and topic, please see src/functions/ntfy.py!
 
 
-# Note to future self, if accepting a list of container images, must use ast method
-# Exmaple: IMAGES = ast.literal_eval(config.get("PODMAN", "IMAGES"))
 ############################
 
 
@@ -68,7 +66,7 @@ script.rainbow("\n \
 |  $$$$$$/| $$|  $$$$$$$|  $$$$$$$| $$  | $$|  $$$$$$$| $$                          \n \
  \______/ |__/ \_______/ \_______/|__/  |__/ \_______/|__/                          \n \
                                                                                     \n \
-                     Container Cleaner V 1.1                                        \n\n")                                                                             
+                     Container Cleaner V 1.2                                        \n\n")                                                                             
 print(Style.RESET_ALL)
 print("\n\n")
 
@@ -77,67 +75,58 @@ script.warn_msg("THIS SCRIPT MAY KILL AND DELETE CONTAINERS/IMAGES WITHOUT CONFI
 print("\n\n")
 
 
-# No need to implement further if config file exists checks here as it will fail on line 31
-# Could be worth implementing additional sanity checks for other variables as the config complexity grows
+
+# Run git pull
+git_pulled = True  # Default to True in case GIT is disabled, prevents missing var error
+if GIT_ENABLED == True:
+    git_pulled = git.git_pull(GIT_REPO_PATHS)
+if NTFY_ENABLED == True and git_pulled == False:
+    ntfy.ntfy_warn_git_pull_fail()
+
+
 
 if CONTAINER_ENGINE == "docker_compose":
-    # Run git pull
-    if GIT_ENABLED == True:
-        git_pulled = git.git_pull(GIT_REPO_PATH)
-
-    if NTFY_ENABLED == True and git_pulled == False:
-        ntfy.ntfy_warn_git_pull_fail()
-        
-
     # Run docker compose pull
-    docker_compose.docker_compose_pull(COMPOSE_FILE)
-    
+    for COMPOSE_FILE in COMPOSE_FILES:
+        docker_compose.docker_compose_pull(COMPOSE_FILE)
 
     # Run docker compose recreate
-    docker_compose.docker_compose_recreate(COMPOSE_FILE)
-
+    for COMPOSE_FILE in COMPOSE_FILES:
+        docker_compose.docker_compose_recreate(COMPOSE_FILE)
 
     # Cleanup all unused docker images
     docker.docker_delete_unused_images()
 
 
 
-elif CONTAINER_ENGINE == "docker":
-    script.err_msg("Standalone docker support has not yet been implemented. Please view Readme.")
-    ntfy.ntfy_err_invalid_container_engine()
+elif CONTAINER_ENGINE == "docker_swarm":
+    # For each Swarm file:
+    for SWARM_FILE in SWARM_FILES:
+        # Extract images and pull them
+        images = docker_swarm.docker_swarm_extract_imagenames_from_swarm_file(SWARM_FILE)
+        docker_swarm.docker_swarm_pull_images(images)
 
-    # Run git pull
-    # Docker pull each image in list
-    # Docker get list of containers
-    # Docker stop all containers, wait for a bit, then kill
-    # Docker start all containers
-
-    # Cleanup all unused docker images
-    #docker.docker_delete_unused_images()
-
-
-elif CONTAINER_ENGINE == "podman":
-    script.err_msg("Standalone podman support has not yet been implemented. Please view Readme.")
-    ntfy.ntfy_err_invalid_container_engine()
-
-    # Run git pull
-    # Docker pull each image in list
-    # Docker get list of containers
-    # Docker stop all containers, wait for a bit, then kill
-    # Docker start all containers
+        # Recreate the Swarm stack
+        docker_swarm.docker_swarm_recreate(SWARM_FILE)
 
     # Cleanup all unused docker images
-    #docker.docker_delete_unused_images()
+    docker.docker_delete_unused_images()
+
 
 
 else:
     script.err_msg("Invalid Configuration. Please review config.ini and README.")
-    ntfy.ntfy_err_invalid_config()
+
+    if NTFY_ENABLED == True:
+        ntfy.ntfy_err_invalid_config()
+
+
 
 
 
 print("\n\n\n")
 script.ok_msg("Finished! Exiting...")
-ntfy.ntfy_ok_run_complete()
+if NTFY_ENABLED == True:
+        ntfy.ntfy_ok_run_complete()
 
 exit()

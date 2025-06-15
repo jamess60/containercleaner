@@ -1,7 +1,20 @@
 Changelog
 ---------------------
+## V1.2
+	- Improved readme installation steps and added section explaining config file
+	- Fixed missing screenshot in readme 
+	- Removed all traces of podman & docker standalone support as this is unlikely to be implemented in the near future
+		- Little benefit/sustainability to auto updates on adhoc single containers + podman has single digit marketshare
+	- Fixed a path inconsistency bug ("containercleaer" vs "ContainerCleaner") causing configs to fail to load
+	- Fixed a bug where the script would fail to run if Ntfy was disabled (as Ntfy did not always respect disabled parameter and tried to push anyway)
+	- Added support for pulling multiple git repos 
+	- Added support for running multiple yml files 
+	- Added support for Docker Swarm
+
+
 ## V1.1.1
 	- Tweaked formatting of Ntfy notifications to make them more iOS friendly
+
 
 
 ## V1.1
