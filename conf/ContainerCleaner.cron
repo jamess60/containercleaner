@@ -1,3 +1,3 @@
 #Enable ContainerCleaner
-00 02 * * * /usr/bin/python3 /usr/share/ContainerCleaner/src/ContainerCleaner.py
+00 02 * * * /usr/bin/python3 /usr/share/containercleaner/src/ContainerCleaner.py
 
