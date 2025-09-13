@@ -38,8 +38,8 @@ def docker_compose_recreate(COMPOSE_FILE):
 
         # Include -p to set the project name dynamically
         compose_recreate_cmd = f"docker compose -p {project_name} -f {COMPOSE_FILE} up -d"
-        # --remove-orphans" - Remove orphans breaks multi compose file mode
-        # -p added so portainer recognises each yml as a stack
+            # --remove-orphans" - Remove orphans breaks multi compose file mode
+            # -p added so portainer recognises each yml as a stack
 
         os.system(compose_recreate_cmd)
         docker_compose_pulled = True

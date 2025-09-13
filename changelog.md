@@ -1,5 +1,11 @@
 Changelog
 ---------------------
+## V1.3
+	- docker_compose.py
+		- Removed --remove-orphans to fix bug with multiple compose files where only containers from the most recently ran compose file remained
+		- Added -p flag, derriving name from yml file, so that portainer sees each yml as a stack
+
+
 ## V1.2
 	- Improved readme installation steps and added section explaining config file
 	- Fixed missing screenshot in readme 

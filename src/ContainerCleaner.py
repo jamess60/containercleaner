@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 __author__ = "james_s60"
-__date__ = "15 June 2025"
+__date__ = "13 September 2025"
 __credits__ = ["james_s60"]
-__version__ = "1.2"
+__version__ = "1.3"
 
 
 ############################
@@ -66,7 +66,7 @@ script.rainbow("\n \
 |  $$$$$$/| $$|  $$$$$$$|  $$$$$$$| $$  | $$|  $$$$$$$| $$                          \n \
  \______/ |__/ \_______/ \_______/|__/  |__/ \_______/|__/                          \n \
                                                                                     \n \
-                     Container Cleaner V 1.2                                        \n\n")                                                                             
+                     Container Cleaner V 1.3                                        \n\n")                                                                             
 print(Style.RESET_ALL)
 print("\n\n")
 
